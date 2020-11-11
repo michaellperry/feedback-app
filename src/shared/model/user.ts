@@ -10,7 +10,7 @@ export class User {
 }
 
 export class UserName {
-    static Type = 'MyApplication.User.Name';
+    static Type = 'Feedback.User.Name';
     type = UserName.Type;
 
     constructor(

@@ -5,9 +5,10 @@ import { UserAvatar } from './UserAvatar';
 export interface CommentBlockProps {
   self: boolean;
   content: string;
+  authorName: string;
 };
 
-export const CommentBlock = ({ self, content }: CommentBlockProps) => {
+export const CommentBlock = ({ self, content, authorName }: CommentBlockProps) => {
   const [ expanded, setExpanded ] = React.useState(false);
   const contentRef = React.useRef<HTMLDivElement>(null);
   const [ contentHeight, setContentHeight ] = React.useState(0);
@@ -20,7 +21,7 @@ export const CommentBlock = ({ self, content }: CommentBlockProps) => {
   return (
     <div className="jinaga-feedback-comment-block">
       <div className="jinaga-feedback-comment-block-info">
-        <UserAvatar />
+        <UserAvatar name={authorName} />
         <p>{ new Date().toLocaleTimeString() }</p>
         <p>{ new Date().toLocaleDateString() }</p>
       </div>
