@@ -64,7 +64,7 @@ export class CommentText {
     return j.match(<CommentText>{
       type: CommentText.Type,
       comment
-    });
+    }).suchThat(CommentText.isCurrent);
   }
 }
 

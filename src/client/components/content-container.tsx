@@ -1,19 +1,20 @@
 import { Comment, CommentText } from "@shared/model/comment";
 import { Content } from "@shared/model/site";
 import { UserName } from "@shared/model/user";
-import { collection, field, jinagaContainer, mapProps, property, specificationFor } from "jinaga-react";
+import { collection, field, jinagaContainer, mapProps, mutable, property, specificationFor } from "jinaga-react";
 import * as React from "react";
 import { j } from "../jinaga-config";
 import { CommentBlock } from "./CommentBlock";
 
 const commentSpecification = specificationFor(Comment, {
-  text: property(j.for(CommentText.forComment), ct => ct.value, ""),
+  comment: field(c => c),
+  commentText: mutable(j.for(CommentText.forComment), candidates => candidates.length > 0 ? candidates[0].value : ""),
   author: field(c => c.author),
   authorName: property(j.for(Comment.author).then(UserName.forUser), n => n.value, "")
 });
 
-const commentMapping = mapProps(commentSpecification).to(({ text, authorName }) => (
-  <CommentBlock content={text} self={true} authorName={authorName} />
+const commentMapping = mapProps(commentSpecification).to(({ comment, commentText, authorName }) => (
+  <CommentBlock comment={comment} self={true} authorName={authorName} commentText={commentText} />
 ));
 
 const contentSpecification = specificationFor(Content, {
