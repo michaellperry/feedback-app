@@ -3,7 +3,7 @@ import { Express, static as ExpressStatic, Handler } from 'express';
 import { renderImage } from './images';
 import { manifest } from './manifest';
 
-export function configureRoutes(app: Express, authenticate: Handler) {
+export function configureRoutes(app: Express) {
   app.use((req, res, next) => {
     // Ensure the page is secure, or that we are running a development build
     if ( req.headers['x-forwarded-proto'] === 'https'
