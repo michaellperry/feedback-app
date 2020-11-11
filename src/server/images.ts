@@ -19,7 +19,7 @@ async function resize(fileName: string, width: number, height: number, mimeType:
   return buffer;
 }
 
-function safeFormat(format: string) {
+function safeFormat(format: any) {
   return (
     format === 'jpeg' ? 'jpeg' :
     format === 'jpg'  ? 'jpeg' :
@@ -30,17 +30,17 @@ function safeFormat(format: string) {
 
 export async function renderImage(req: Request, res: Response, imageFileName: string) {
   // Extract the query-parameter
-  const widthString = req.query.width.toString();
-  const heightString = req.query.height.toString();
-  const format = req.query.format.toString();
+  const widthString = req.query.width;
+  const heightString = req.query.height;
+  const format = req.query.format;
 
   // Parse to integer if possible
   let width, height;
   if (widthString) {
-    width = parseInt(widthString);
+    width = parseInt(widthString.toString());
   }
   if (heightString) {
-    height = parseInt(heightString);
+    height = parseInt(heightString.toString());
   }
 
   // Set the content-type of the response
