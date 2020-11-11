@@ -8,12 +8,12 @@ import { CommentBlock } from "./CommentBlock";
 
 const commentSpecification = specificationFor(Comment, {
   text: property(j.for(CommentText.forComment), ct => ct.value, ""),
-  authorName: property(j.for(Comment.author).then(UserName.forUser), n => n.value, ""),
-  self: field(c => j.hash(c.author) === j.hash(c.content.site.createdBy))
+  author: field(c => c.author),
+  authorName: property(j.for(Comment.author).then(UserName.forUser), n => n.value, "")
 });
 
-const commentMapping = mapProps(commentSpecification).to(({ text, authorName, self }) => (
-  <CommentBlock content={text} self={self} authorName={authorName} />
+const commentMapping = mapProps(commentSpecification).to(({ text, authorName }) => (
+  <CommentBlock content={text} self={true} authorName={authorName} />
 ));
 
 const contentSpecification = specificationFor(Content, {

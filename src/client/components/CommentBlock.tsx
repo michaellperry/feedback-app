@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { UserAvatar } from './UserAvatar';
+import Button from '@material-ui/core/Button';
 
 export interface CommentBlockProps {
   self: boolean;
@@ -43,7 +44,7 @@ export const CommentBlock = ({ self, content, authorName }: CommentBlockProps) =
       <div className="jinaga-feedback-comment-block-controls">
         {
           self
-            ? <button type="button" onClick={ () => edit() }>Edit</button>
+            ? <Button onClick={() => edit()} variant="contained" color="primary">Edit</Button>
             : <></>
         }
         {
