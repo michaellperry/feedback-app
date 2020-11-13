@@ -19,7 +19,7 @@ export function useEditor(saveCommentText: (value: string) => Promise<void>) : [
 }
 
 export interface CommentDialogProps {
-  onSave: (value: string) => Promise<void>;
+  onSave(value: string): Promise<void>;
 };
 
 interface CommentDialogState {
