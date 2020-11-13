@@ -1,11 +1,10 @@
-import * as React from 'react';
-
-import { UserAvatar } from './UserAvatar';
 import Button from '@material-ui/core/Button';
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core';
-import { j } from '../jinaga-config';
 import { Comment, CommentText } from '@shared/model/comment';
-import { Mutable, prior } from 'jinaga-react';
+import { Mutable } from 'jinaga-react';
+import * as React from 'react';
+import { CommentDialog } from './comment-dialog';
+import { UserAvatar } from './UserAvatar';
+
 
 export interface CommentBlockProps {
   self: boolean;
@@ -22,20 +21,7 @@ export const CommentBlock = ({ self, authorName, comment, commentText }: Comment
     setContentHeight(contentRef.current?.scrollHeight ?? 0);
   }, [contentRef]);
 
-  const [ editContent, setEditContent ] = React.useState("");
-  const [ editing, setEditing ] = React.useState(false);
-
-  const edit = () => {
-    setEditContent(commentText.value);
-    setEditing(true);
-  }
-  const close = () => {
-    setEditing(false);
-  }
-  const save = () => {
-    j.fact(new CommentText(comment, editContent, prior(commentText)))
-    close();
-  }
+  const dialogRef = React.useRef<CommentDialog>(null);
 
   return (
     <>
@@ -63,7 +49,7 @@ export const CommentBlock = ({ self, authorName, comment, commentText }: Comment
         <div className="jinaga-feedback-comment-block-controls">
           {
             self
-              ? <Button onClick={() => edit()} variant="contained" color="primary">Edit</Button>
+              ? <Button onClick={() => dialogRef.current.begin()} variant="contained" color="primary">Edit</Button>
               : <></>
           }
           {
@@ -75,20 +61,10 @@ export const CommentBlock = ({ self, authorName, comment, commentText }: Comment
           }
         </div>
       </div>
-      <Dialog open={editing} onClose={() => close()}>
-          <DialogTitle>Edit Feedback</DialogTitle>
-          <DialogContent>
-            <DialogContentText>What did you mean to say?</DialogContentText>
-            <TextField
-              value={editContent}
-              onChange={e => setEditContent(e.target.value)}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => save()} variant="contained" color="primary">Save</Button>
-            <Button onClick={() => close()} color="default">Cancel</Button>
-          </DialogActions>
-      </Dialog>
+      <CommentDialog
+        ref={dialogRef}
+        comment={comment}
+        commentText={commentText} />
     </>
   );
 }
