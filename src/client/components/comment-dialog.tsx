@@ -1,13 +1,9 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { Comment, CommentText } from "@shared/model/comment";
-import { Mutable, prior } from "jinaga-react";
 import * as React from "react";
-import { j } from "../jinaga-config";
 
 export interface CommentDialogProps {
-  comment: Comment;
-  commentText: Mutable<CommentText, string>;
+  onSave: (value: string) => Promise<void>;
 };
 
 interface CommentDialogState {
@@ -44,9 +40,9 @@ export class CommentDialog extends React.Component<CommentDialogProps, CommentDi
     );
   }
 
-  begin() {
+  begin(value: string) {
     this.setState({
-      value: this.props.commentText.value,
+      value,
       editing: true
     });
   }
@@ -64,10 +60,7 @@ export class CommentDialog extends React.Component<CommentDialogProps, CommentDi
   }
 
   private onSave() {
-    const comment = this.props.comment;
     const value = this.state.value;
-    const commentText = this.props.commentText;
-    j.fact(new CommentText(comment, value, prior(commentText)))
-      .then(() => this.onClose());
+    this.props.onSave(value).then(() => this.onClose());
   }
 }

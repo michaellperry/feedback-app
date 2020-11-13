@@ -1,10 +1,10 @@
 import Button from '@material-ui/core/Button';
 import { Comment, CommentText } from '@shared/model/comment';
-import { Mutable } from 'jinaga-react';
+import { Mutable, prior } from 'jinaga-react';
 import * as React from 'react';
+import { j } from '../jinaga-config';
 import { CommentDialog } from './comment-dialog';
 import { UserAvatar } from './UserAvatar';
-
 
 export interface CommentBlockProps {
   self: boolean;
@@ -22,6 +22,9 @@ export const CommentBlock = ({ self, authorName, comment, commentText }: Comment
   }, [contentRef]);
 
   const dialogRef = React.useRef<CommentDialog>(null);
+  const saveCommentText = async (value: string) => {
+    await j.fact(new CommentText(comment, value, prior(commentText)));
+  };
 
   return (
     <>
@@ -49,7 +52,7 @@ export const CommentBlock = ({ self, authorName, comment, commentText }: Comment
         <div className="jinaga-feedback-comment-block-controls">
           {
             self
-              ? <Button onClick={() => dialogRef.current.begin()} variant="contained" color="primary">Edit</Button>
+              ? <Button onClick={() => dialogRef.current.begin(commentText.value)} variant="contained" color="primary">Edit</Button>
               : <></>
           }
           {
@@ -63,8 +66,7 @@ export const CommentBlock = ({ self, authorName, comment, commentText }: Comment
       </div>
       <CommentDialog
         ref={dialogRef}
-        comment={comment}
-        commentText={commentText} />
+        onSave={saveCommentText} />
     </>
   );
 }
