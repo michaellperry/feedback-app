@@ -2,6 +2,22 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, T
 import Button from '@material-ui/core/Button';
 import * as React from "react";
 
+export function useEditor(saveCommentText: (value: string) => Promise<void>) : [ (value: string) => void, () => JSX.Element ] {
+  const dialogRef = React.useRef<CommentDialog>(null);
+
+  const begin = (initialValue: string) => {
+    dialogRef.current.begin(initialValue);
+  };
+
+  const Editor = () => (
+    <CommentDialog
+      ref={dialogRef}
+      onSave={saveCommentText} />
+  );
+
+  return [ begin, Editor ];
+}
+
 export interface CommentDialogProps {
   onSave: (value: string) => Promise<void>;
 };

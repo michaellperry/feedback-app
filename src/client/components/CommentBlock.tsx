@@ -3,7 +3,7 @@ import { Comment, CommentText } from '@shared/model/comment';
 import { Mutable, prior } from 'jinaga-react';
 import * as React from 'react';
 import { j } from '../jinaga-config';
-import { CommentDialog } from './comment-dialog';
+import { useEditor } from './comment-dialog';
 import { UserAvatar } from './UserAvatar';
 
 export interface CommentBlockProps {
@@ -21,10 +21,10 @@ export const CommentBlock = ({ self, authorName, comment, commentText }: Comment
     setContentHeight(contentRef.current?.scrollHeight ?? 0);
   }, [contentRef]);
 
-  const dialogRef = React.useRef<CommentDialog>(null);
   const saveCommentText = async (value: string) => {
     await j.fact(new CommentText(comment, value, prior(commentText)));
   };
+  const [ beginComentEditor, CommentEditor ] = useEditor(saveCommentText);
 
   return (
     <>
@@ -52,7 +52,7 @@ export const CommentBlock = ({ self, authorName, comment, commentText }: Comment
         <div className="jinaga-feedback-comment-block-controls">
           {
             self
-              ? <Button onClick={() => dialogRef.current.begin(commentText.value)} variant="contained" color="primary">Edit</Button>
+              ? <Button onClick={() => beginComentEditor(commentText.value)} variant="contained" color="primary">Edit</Button>
               : <></>
           }
           {
@@ -64,9 +64,7 @@ export const CommentBlock = ({ self, authorName, comment, commentText }: Comment
           }
         </div>
       </div>
-      <CommentDialog
-        ref={dialogRef}
-        onSave={saveCommentText} />
+      <CommentEditor />
     </>
   );
 }
