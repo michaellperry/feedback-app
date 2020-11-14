@@ -2,28 +2,16 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, T
 import Button from '@material-ui/core/Button';
 import * as React from "react";
 
-export function useEditor(saveCommentText: (value: string) => Promise<void>) : [ (value: string) => void, () => JSX.Element ] {
-  const dialogRef = React.useRef<CommentDialog>(null);
-
-  const begin = (initialValue: string) => {
-    dialogRef.current.begin(initialValue);
-  };
-
-  const Editor = () => (
-    <CommentDialog
-      ref={dialogRef}
-      onSave={saveCommentText} />
-  );
-
-  return [ begin, Editor ];
+export interface CommentData {
+  commentText: string;
 }
 
 export interface CommentDialogProps {
-  onSave(value: string): Promise<void>;
+  onSave(value: CommentData): Promise<void>;
 };
 
 interface CommentDialogState {
-  value: string;
+  value: CommentData;
   editing: boolean;
 }
 
@@ -32,20 +20,20 @@ export class CommentDialog extends React.Component<CommentDialogProps, CommentDi
     super(props);
 
     this.state = {
-      value: "",
+      value: null,
       editing: false
     };
   }
 
   render() {
-    return (
+    return !this.state.value ? <></> : (
       <Dialog open={this.state.editing} onClose={() => this.onClose()}>
         <DialogTitle>Edit Feedback</DialogTitle>
         <DialogContent>
           <DialogContentText>What did you mean to say?</DialogContentText>
           <TextField
-            value={this.state.value}
-            onChange={e => this.setValue(e.target.value)}
+            value={this.state.value.commentText}
+            onChange={e => this.setCommentText(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
@@ -56,16 +44,18 @@ export class CommentDialog extends React.Component<CommentDialogProps, CommentDi
     );
   }
 
-  begin(value: string) {
+  begin(value: CommentData) {
     this.setState({
       value,
       editing: true
     });
   }
 
-  private setValue(value: string) {
+  private setCommentText(commentText: string) {
     this.setState({
-      value
+      value: {
+        commentText
+      }
     });
   }
 
