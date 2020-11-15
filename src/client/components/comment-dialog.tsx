@@ -7,11 +7,11 @@ export interface CommentData {
 }
 
 export interface CommentDialogProps {
-  onSave(value: CommentData): Promise<void>;
+  onSave(data: CommentData): Promise<void>;
 };
 
 interface CommentDialogState {
-  value: CommentData;
+  data: CommentData;
   editing: boolean;
 }
 
@@ -20,19 +20,19 @@ export class CommentDialog extends React.Component<CommentDialogProps, CommentDi
     super(props);
 
     this.state = {
-      value: null,
+      data: null,
       editing: false
     };
   }
 
   render() {
-    return !this.state.value ? <></> : (
+    return !this.state.data ? <></> : (
       <Dialog open={this.state.editing} onClose={() => this.onClose()}>
         <DialogTitle>Edit Feedback</DialogTitle>
         <DialogContent>
           <DialogContentText>What did you mean to say?</DialogContentText>
           <TextField
-            value={this.state.value.commentText}
+            value={this.state.data.commentText}
             onChange={e => this.setCommentText(e.target.value)}
           />
         </DialogContent>
@@ -44,16 +44,16 @@ export class CommentDialog extends React.Component<CommentDialogProps, CommentDi
     );
   }
 
-  begin(value: CommentData) {
+  begin(data: CommentData) {
     this.setState({
-      value,
+      data,
       editing: true
     });
   }
 
   private setCommentText(commentText: string) {
     this.setState({
-      value: {
+      data: {
         commentText
       }
     });
@@ -66,7 +66,7 @@ export class CommentDialog extends React.Component<CommentDialogProps, CommentDi
   }
 
   private onSave() {
-    const value = this.state.value;
-    this.props.onSave(value).then(() => this.onClose());
+    const data = this.state.data;
+    this.props.onSave(data).then(() => this.onClose());
   }
 }

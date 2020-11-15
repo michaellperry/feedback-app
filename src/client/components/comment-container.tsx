@@ -13,8 +13,11 @@ export interface CommentContainerProps {
 };
 
 export const CommentContainer = ({ self, authorName, comment, commentText }: CommentContainerProps) => {
-  const saveCommentText = async (value: CommentData) => {
-    await j.fact(new CommentText(comment, value.commentText, prior(commentText)));
+  const saveCommentText = async (data: CommentData) => {
+    const priorArray = prior(commentText);
+    if (data.commentText !== commentText.value || priorArray.length !== 1) {
+      await j.fact(new CommentText(comment, data.commentText, priorArray));
+    }
   };
   const dialogRef = React.useRef<CommentDialog>(null);
 
