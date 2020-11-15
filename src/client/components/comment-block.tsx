@@ -1,6 +1,6 @@
 import Button from '@material-ui/core/Button';
 import * as React from "react";
-import { UserAvatar } from './UserAvatar';
+import { UserAvatar } from './user-avatar';
 
 export interface CommentBlockProps {
   self: boolean;
