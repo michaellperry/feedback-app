@@ -4,7 +4,7 @@ import { UserName } from "@shared/model/user";
 import { collection, field, jinagaContainer, mapProps, mutable, property, specificationFor } from "jinaga-react";
 import * as React from "react";
 import { j } from "../jinaga-config";
-import { CommentBlock } from "./CommentBlock";
+import { CommentContainer } from "./comment-container";
 
 const commentSpecification = specificationFor(Comment, {
   comment: field(c => c),
@@ -14,7 +14,7 @@ const commentSpecification = specificationFor(Comment, {
 });
 
 const commentMapping = mapProps(commentSpecification).to(({ comment, commentText, authorName }) => (
-  <CommentBlock comment={comment} self={true} authorName={authorName} commentText={commentText} />
+  <CommentContainer comment={comment} self={true} authorName={authorName} commentText={commentText} />
 ));
 
 const contentSpecification = specificationFor(Content, {
